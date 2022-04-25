@@ -1,0 +1,149 @@
+﻿@*@model InvoiceGenerator.Models.InvoiceProduct*@
+
+@{
+    ViewData["Title"] = "Details";
+}
+<div id="PrintData">
+<div class="container d-inline-block border border-secondary">
+    <div class="container-fluid vh-25">
+        <div class="text-center">
+            <h3>Invoice</h3>
+        </div>
+        <div>
+            <p><b>Business Name:</b> Yolo Furnitures Pvt. Ltd. </p>
+            <p><b>Business Address:</b> Shop No:3, 7th Street </p>
+            <p><b>City:</b> Udaipur</p>
+            <p><b>State:</b> Rajasthan</p>
+            <p><b>Contact Number:</b> +91 82653 85485</p>
+        </div>&nbsp;
+        <div class="mt-3">
+            <p><b>To:</b></p>
+            <p><b>Business Name:</b> @ViewBag.Invoice.ClientName</p>
+            <p><b>Business Address:</b> @ViewBag.Invoice.Address </p>
+            <p><b>City:</b> @ViewBag.Invoice.City - @ViewBag.Invoice.PinCode</p>
+            <p><b>GST Number:</b> @ViewBag.Invoice.ClientGST</p>
+            <p><b>PAN Number:</b> @ViewBag.Invoice.PANNumber</p>
+        </div>&nbsp;
+        <div class="mt-3">
+            <p><b>Invoice Number:</b> @ViewBag.Invoice.InvoiceId </p>
+            <p><b>Date:</b> @ViewBag.Invoice.CreatedDate</p>
+            <p><b>Due Date:</b> @ViewBag.Invoice.LastDate</p>
+        </div>
+    </div>&nbsp;
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Discount</th>
+                <th>Tax</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                decimal sum = 0;
+            }
+            @foreach(var item in ViewBag.InvoiceProduct)
+            {
+                <tr>
+                    <td></td>
+                    <td>@item.ProductName</td>
+                    <td>@item.Price</td>
+                    <td>@item.ProductQuantity</td>
+                    <td>@item.Discount</td>
+                    <td>@item.ProductTax</td>
+                    <td>@item.Amount</td>
+                </tr>
+                sum = sum + @item.Amount;
+            }
+        </tbody>
+    </table>
+    <h4>Total Amount:</h4><b> @sum</b>
+</div>
+</div>
+@*<h1>Details</h1>
+
+<div>
+    <h4>Invoice</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.InvoiceId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.InvoiceId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ClientName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ClientName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ClientGST)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ClientGST)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Address)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.City)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.City)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PinCode)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PinCode)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PANNumber)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PANNumber)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ContactNumber)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ContactNumber)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CreatedDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.LastDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.LastDate)
+        </dd>
+    </dl>
+</div>*@
+<div>
+    <a asp-action="Edit" asp-route-id="@ViewBag.Invoice.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+    @using (Html.BeginForm("Export", "Invoices", FormMethod.Post))
+    {
+        <input type="hidden" id="expdata" name="ExportData" />
+        <input type="submit" id="btnSubmit" onclick="change()" value="PDF" />
+    }
+</div>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript">
+    function change(){
+	    document.getElementById("expdata").value = document.getElementById("PrintData").innerHTML;
+    }
+</script>
